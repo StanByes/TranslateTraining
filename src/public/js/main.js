@@ -38,7 +38,6 @@ async function newWord() {
 
     const words = await (await fetch("/generate?count=1&lang=" + lang, {method: "GET"})).json();
     word = words[0];
-    console.log(word);
 
     loading.classList.add("d-none");
     loading.classList.remove("d-block");
