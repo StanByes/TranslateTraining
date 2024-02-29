@@ -23,17 +23,20 @@ app.get("/", (req, res) => {
 app.get("/generate", async (req, res) => {
     res.contentType("json");
 
-    const { count } = req.query;
-    if (!count)
+    const { count, lang } = req.query;
+    if (!count || !lang)
         return res.status(400).send("Bad request");
 
-    const words = await fetch(`https://random-word-api.herokuapp.com/word?lang=es&number=${count}`, {method: "GET"});
+    if (lang != "es" && lang != "en")
+        return res.status(400).send("Unknown langage");
+
+    const words = await fetch(`https://random-word-api.herokuapp.com/word?lang=${lang}&number=${count}`, {method: "GET"});
     const jsonWords: string[] = await words.json();
 
     const result: any[] = [];
     for (let word of jsonWords) {
         const translation = await translate(word, {
-            from: "es",
+            from: lang,
             to: "fr"
         });
         result.push({

@@ -1,6 +1,8 @@
+let lang = "es";
 let word = {base: "", translate: ""};
 
 const informations = document.getElementById("informations");
+const langSelector = document.getElementById("lang");
 const loading = document.getElementById("loading");
 const newButton = document.getElementById("new");
 const translate = document.getElementById("translate");
@@ -34,7 +36,7 @@ async function newWord() {
     validate.classList.add("disabled");
     wordLabel.innerHTML = "Loading...";
 
-    const words = await (await fetch("/generate?count=1", {method: "GET"})).json();
+    const words = await (await fetch("/generate?count=1&lang=" + lang, {method: "GET"})).json();
     word = words[0];
     console.log(word);
 
@@ -46,6 +48,10 @@ async function newWord() {
     wordLabel.innerHTML = word.base.toLowerCase();
 }
 
+langSelector.onchange = (ev) => {
+    lang = langSelector.value;
+    newWord();
+}
 translate.onkeydown = (ev) => {
     if (ev.key == "Enter")
         validateWord();
